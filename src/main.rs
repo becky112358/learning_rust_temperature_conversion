@@ -36,18 +36,19 @@ fn main() {
     println!("You input {} \n", temperature_type);
 
     if temperature_type == 'C' {
-        println!("Converting from Celcius");
         convert_from_celcius(temperature);
     } else if temperature_type == 'F' {
-        println!("Converting from Fahrenheit");
+        convert_from_fahrenheit(temperature);
     } else if temperature_type == 'K' {
-        println!("Converting from Kelvin");
+        convert_from_kelvin(temperature);
     } else {
         println!("Unrecognised type input, cannot convert temperature.");
     }
 }
 
 fn convert_from_celcius(c: f32) {
+    println!("Converting from Celcius");
+
     let f = (c * 1.8) + 32.0;
     let k = c + 273.15;
 
@@ -56,4 +57,25 @@ fn convert_from_celcius(c: f32) {
     println!("{} degrees Kelvin", k);
 }
 
+fn convert_from_fahrenheit(f: f32) {
+    println!("Converting from Fahrenheit");
+
+    let c = (f - 32.0) * (5.0 / 9.0);
+    let k = c + 273.15;
+
+    println!("{} degrees Celcius", c);
+    println!("{} degrees Fahrenheit", f);
+    println!("{} degrees Kelvin", k);
+}
+
+fn convert_from_kelvin(k: f32) {
+    println!("Converting from Kelvin");
+
+    let c = k - 273.15;
+    let f = (c * 1.8) + 32.0;
+
+    println!("{} degrees Celcius", c);
+    println!("{} degrees Fahrenheit", f);
+    println!("{} degrees Kelvin", k);
+}
 
