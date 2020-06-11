@@ -1,6 +1,9 @@
 use std::io;
 
 const WIDTH: usize = 10;
+const ABSOLUTE_ZERO: f32 = -273.15;
+const CELCIUS_TO_FAHRENHEIT_OFFSET: f32 = 32.0;
+const CELCIUS_TO_FAHRENHEIT_SCALE: f32 = 9.0/5.0;
 
 fn main() {
     println!("Please input the temperature to be converted.");
@@ -47,8 +50,8 @@ fn main() {
 fn convert_from_celcius(c: f32) {
     println!("Converting from Celcius");
 
-    let f = (c * 1.8) + 32.0;
-    let k = c + 273.15;
+    let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
+    let k = c - ABSOLUTE_ZERO;
 
     println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
     println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
@@ -58,8 +61,8 @@ fn convert_from_celcius(c: f32) {
 fn convert_from_fahrenheit(f: f32) {
     println!("Converting from Fahrenheit");
 
-    let c = (f - 32.0) * (5.0 / 9.0);
-    let k = c + 273.15;
+    let c = (f - CELCIUS_TO_FAHRENHEIT_OFFSET) / CELCIUS_TO_FAHRENHEIT_SCALE;
+    let k = c - ABSOLUTE_ZERO;
 
     println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
     println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
@@ -69,8 +72,8 @@ fn convert_from_fahrenheit(f: f32) {
 fn convert_from_kelvin(k: f32) {
     println!("Converting from Kelvin");
 
-    let c = k - 273.15;
-    let f = (c * 1.8) + 32.0;
+    let c = k + ABSOLUTE_ZERO;
+    let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
 
     println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
     println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
