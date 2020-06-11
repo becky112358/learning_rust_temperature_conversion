@@ -19,6 +19,20 @@ fn main() {
         Err(_) => return,
     };
 
+    let temperature_type = receive_temperature_type();
+
+    if (temperature_type == 'C') || (temperature_type == 'c') {
+        convert_from_celcius(temperature);
+    } else if (temperature_type == 'F') || (temperature_type == 'f') {
+        convert_from_fahrenheit(temperature);
+    } else if (temperature_type == 'K') || (temperature_type == 'k') {
+        convert_from_kelvin(temperature);
+    } else {
+        println!("Unrecognised type input, cannot convert temperature.");
+    }
+}
+
+fn receive_temperature_type() -> char {
     println!("Please state the temperature type to be converted from.");
     println!("Options:");
     println!("C (Celsius)");
@@ -33,18 +47,13 @@ fn main() {
 
     let temperature_type: char = match temperature_type.trim().parse() {
         Ok(num) => num,
-        Err(_) => return,
+        // Hopefully I'll learn a better way to handle this...
+        // But for now, return something that is not
+        // 'C', 'c', 'F', 'f', 'K', or 'k'
+        Err(_) => return '0',
     };
 
-    if (temperature_type == 'C') || (temperature_type == 'c') {
-        convert_from_celcius(temperature);
-    } else if (temperature_type == 'F') || (temperature_type == 'f') {
-        convert_from_fahrenheit(temperature);
-    } else if (temperature_type == 'K') || (temperature_type == 'k') {
-        convert_from_kelvin(temperature);
-    } else {
-        println!("Unrecognised type input, cannot convert temperature.");
-    }
+    return temperature_type;
 }
 
 fn convert_from_celcius(c: f32) {
