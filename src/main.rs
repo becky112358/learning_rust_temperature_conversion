@@ -1,5 +1,7 @@
 use std::io;
 
+const WIDTH: usize = 10;
+
 fn main() {
     println!("Please input the temperature to be converted.");
 
@@ -13,8 +15,6 @@ fn main() {
         Ok(num) => num,
         Err(_) => return,
     };
-
-    println!("You input {}", temperature);
 
     println!("Please state the temperature type to be converted from.");
     println!("Options:");
@@ -33,13 +33,11 @@ fn main() {
         Err(_) => return,
     };
 
-    println!("You input {} \n", temperature_type);
-
-    if temperature_type == 'C' {
+    if (temperature_type == 'C') || (temperature_type == 'c') {
         convert_from_celcius(temperature);
-    } else if temperature_type == 'F' {
+    } else if (temperature_type == 'F') || (temperature_type == 'f') {
         convert_from_fahrenheit(temperature);
-    } else if temperature_type == 'K' {
+    } else if (temperature_type == 'K') || (temperature_type == 'k') {
         convert_from_kelvin(temperature);
     } else {
         println!("Unrecognised type input, cannot convert temperature.");
@@ -52,9 +50,9 @@ fn convert_from_celcius(c: f32) {
     let f = (c * 1.8) + 32.0;
     let k = c + 273.15;
 
-    println!("{} degrees Celcius", c);
-    println!("{} degrees Fahrenheit", f);
-    println!("{} degrees Kelvin", k);
+    println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
+    println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
+    println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
 }
 
 fn convert_from_fahrenheit(f: f32) {
@@ -63,9 +61,9 @@ fn convert_from_fahrenheit(f: f32) {
     let c = (f - 32.0) * (5.0 / 9.0);
     let k = c + 273.15;
 
-    println!("{} degrees Celcius", c);
-    println!("{} degrees Fahrenheit", f);
-    println!("{} degrees Kelvin", k);
+    println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
+    println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
+    println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
 }
 
 fn convert_from_kelvin(k: f32) {
@@ -74,8 +72,8 @@ fn convert_from_kelvin(k: f32) {
     let c = k - 273.15;
     let f = (c * 1.8) + 32.0;
 
-    println!("{} degrees Celcius", c);
-    println!("{} degrees Fahrenheit", f);
-    println!("{} degrees Kelvin", k);
+    println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
+    println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
+    println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
 }
 
