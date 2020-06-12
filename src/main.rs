@@ -59,8 +59,8 @@ fn receive_temperature_type() -> char {
 fn convert_from_celcius(c: f32) {
     println!("Converting from Celcius");
 
-    let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
-    let k = c - ABSOLUTE_ZERO;
+    let f = convert_from_celcius_to_fahrenheit(c);
+    let k = convert_from_celcius_to_kelvin(c);
 
     print_temperatures(c, f, k);
 }
@@ -69,7 +69,7 @@ fn convert_from_fahrenheit(f: f32) {
     println!("Converting from Fahrenheit");
 
     let c = (f - CELCIUS_TO_FAHRENHEIT_OFFSET) / CELCIUS_TO_FAHRENHEIT_SCALE;
-    let k = c - ABSOLUTE_ZERO;
+    let k = convert_from_celcius_to_kelvin(c);
 
     print_temperatures(c, f, k);
 }
@@ -78,9 +78,17 @@ fn convert_from_kelvin(k: f32) {
     println!("Converting from Kelvin");
 
     let c = k + ABSOLUTE_ZERO;
-    let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
+    let f = convert_from_celcius_to_fahrenheit(c);
 
     print_temperatures(c, f, k);
+}
+
+fn convert_from_celcius_to_fahrenheit(c: f32) -> f32 {
+    (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET
+}
+
+fn convert_from_celcius_to_kelvin(c: f32) -> f32 {
+    c - ABSOLUTE_ZERO
 }
 
 fn print_temperatures(c: f32, f: f32, k: f32) {
