@@ -62,9 +62,7 @@ fn convert_from_celcius(c: f32) {
     let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
     let k = c - ABSOLUTE_ZERO;
 
-    println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
-    println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
-    println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
+    print_temperatures(c, f, k);
 }
 
 fn convert_from_fahrenheit(f: f32) {
@@ -73,9 +71,7 @@ fn convert_from_fahrenheit(f: f32) {
     let c = (f - CELCIUS_TO_FAHRENHEIT_OFFSET) / CELCIUS_TO_FAHRENHEIT_SCALE;
     let k = c - ABSOLUTE_ZERO;
 
-    println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
-    println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
-    println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
+    print_temperatures(c, f, k);
 }
 
 fn convert_from_kelvin(k: f32) {
@@ -84,6 +80,10 @@ fn convert_from_kelvin(k: f32) {
     let c = k + ABSOLUTE_ZERO;
     let f = (c * CELCIUS_TO_FAHRENHEIT_SCALE) + CELCIUS_TO_FAHRENHEIT_OFFSET;
 
+    print_temperatures(c, f, k);
+}
+
+fn print_temperatures(c: f32, f: f32, k: f32) {
     println!("{c:>width$} degrees Celcius", c=c, width=WIDTH);
     println!("{f:>width$} degrees Fahrenheit", f=f, width=WIDTH);
     println!("{k:>width$} degrees Kelvin", k=k, width=WIDTH);
