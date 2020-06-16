@@ -6,20 +6,7 @@ const CELCIUS_TO_FAHRENHEIT_OFFSET: f32 = 32.0;
 const CELCIUS_TO_FAHRENHEIT_SCALE: f32 = 9.0/5.0;
 
 fn main() {
-    println!("Please input the temperature to be converted.");
-
-    let mut temperature = String::new();
-
-    io::stdin()
-        .read_line(&mut temperature)
-        .expect("Failed to read line.");
-
-    let temperature: f32 = match temperature.trim().parse() {
-        Ok(num) => num,
-        Err(_) => return,
-    };
-
-    let temperature_type = receive_temperature_type();
+    let (temperature, temperature_type) = receive_temperature();
 
     if (temperature_type == 'C') || (temperature_type == 'c') {
         convert_from_celcius(temperature);
@@ -32,28 +19,46 @@ fn main() {
     }
 }
 
-fn receive_temperature_type() -> char {
-    println!("Please state the temperature type to be converted from.");
-    println!("Options:");
-    println!("C (Celsius)");
+fn receive_temperature() -> (f32, char) {
+    println!("Please state the temperature to be converted from.");
+    println!("Please enter it as follows: \"temperature type\"");
+    println!("Types available to convert from:");
+    println!("C (Celcius)");
     println!("F (Fahrenheit)");
     println!("K (Kelvin)");
 
-    let mut temperature_type = String::new();
+    let mut temperature_and_type = String::new();
 
     io::stdin()
-        .read_line(&mut temperature_type)
+        .read_line(&mut temperature_and_type)
         .expect("Failed to read line.");
+
+    let (temperature, temperature_type)
+        = split_temperature_and_type(&temperature_and_type);
+
+    let temperature: f32 = match temperature.trim().parse() {
+        Ok(num) => num,
+        Err(_) => return (0.0, '0'),
+    };
 
     let temperature_type: char = match temperature_type.trim().parse() {
         Ok(num) => num,
-        // Hopefully I'll learn a better way to handle this...
-        // But for now, return something that is not
-        // 'C', 'c', 'F', 'f', 'K', or 'k'
-        Err(_) => return '0',
+        Err(_) => return (0.0, '0'),
     };
 
-    return temperature_type;
+    return (temperature, temperature_type);
+}
+
+fn split_temperature_and_type(temperature_and_type: &str) -> (&str, &str) {
+    let bytes = temperature_and_type.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return (&temperature_and_type[0..i], &temperature_and_type[i+1..]);
+        }
+    }
+
+    (&temperature_and_type[..], &temperature_and_type[..])
 }
 
 fn convert_from_celcius(c: f32) {
