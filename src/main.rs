@@ -5,21 +5,26 @@ const ABSOLUTE_ZERO: f32 = -273.15;
 const CELCIUS_TO_FAHRENHEIT_OFFSET: f32 = 32.0;
 const CELCIUS_TO_FAHRENHEIT_SCALE: f32 = 9.0/5.0;
 
+enum TempType {
+    Celcius,
+    Fahrenheit,
+    Kelvin,
+}
+
 fn main() {
     let (temperature, temperature_type) = receive_temperature();
 
-    if (temperature_type == 'C') || (temperature_type == 'c') {
-        convert_from_celcius(temperature);
-    } else if (temperature_type == 'F') || (temperature_type == 'f') {
-        convert_from_fahrenheit(temperature);
-    } else if (temperature_type == 'K') || (temperature_type == 'k') {
-        convert_from_kelvin(temperature);
-    } else {
-        println!("Unrecognised type input, cannot convert temperature.");
+    match temperature_type {
+        Some(TempType::Celcius) => convert_from_celcius(temperature),
+        Some(TempType::Fahrenheit) => convert_from_fahrenheit(temperature),
+        Some(TempType::Kelvin) => convert_from_kelvin(temperature),
+        None => {
+            println!("Unrecognised type input, cannot convert temperature.");
+        }
     }
 }
 
-fn receive_temperature() -> (f32, char) {
+fn receive_temperature() -> (f32, Option<TempType>) {
     println!("Please state the temperature to be converted from.");
     println!("Please enter it as follows: \"temperature type\"");
     println!("Types available to convert from:");
@@ -33,18 +38,28 @@ fn receive_temperature() -> (f32, char) {
         .read_line(&mut temperature_and_type)
         .expect("Failed to read line.");
 
-    let (temperature, temperature_type)
+    let (temperature, temp_type_string)
         = split_temperature_and_type(&temperature_and_type);
 
     let temperature: f32 = match temperature.trim().parse() {
         Ok(num) => num,
-        Err(_) => return (0.0, '0'),
+        Err(_) => return (0.0, None),
     };
 
-    let temperature_type: char = match temperature_type.trim().parse() {
-        Ok(num) => num,
-        Err(_) => return (0.0, '0'),
-    };
+    // The user may have input the temperature type using the full word
+    // or they may have input just the first letter of the temperature type.
+    // Extract the first letter of their input.
+    let temp_type_char = temp_type_string.chars().next().unwrap();
+
+    let mut temperature_type: Option<TempType> = None;
+
+    if (temp_type_char == 'C') || (temp_type_char == 'c') {
+        temperature_type = Some(TempType::Celcius);
+    } else if (temp_type_char == 'F') || (temp_type_char == 'f') {
+        temperature_type = Some(TempType::Fahrenheit);
+    } else if (temp_type_char == 'K') || (temp_type_char == 'k') {
+        temperature_type = Some(TempType::Kelvin);
+    }
 
     return (temperature, temperature_type);
 }
