@@ -11,20 +11,25 @@ enum TempType {
     Kelvin,
 }
 
-fn main() {
-    let (temperature, temperature_type) = receive_temperature();
+struct Temperature {
+    temp_type: Option<TempType>,
+    value: f32,
+}
 
-    match temperature_type {
-        Some(TempType::Celcius) => convert_from_celcius(temperature),
-        Some(TempType::Fahrenheit) => convert_from_fahrenheit(temperature),
-        Some(TempType::Kelvin) => convert_from_kelvin(temperature),
+fn main() {
+    let temp = receive_temperature();
+
+    match temp.temp_type {
+        Some(TempType::Celcius) => convert_from_celcius(temp.value),
+        Some(TempType::Fahrenheit) => convert_from_fahrenheit(temp.value),
+        Some(TempType::Kelvin) => convert_from_kelvin(temp.value),
         None => {
             println!("Unrecognised type input, cannot convert temperature.");
         }
     }
 }
 
-fn receive_temperature() -> (f32, Option<TempType>) {
+fn receive_temperature() -> Temperature {
     println!("Please state the temperature to be converted from.");
     println!("Please enter it as follows: \"temperature type\"");
     println!("Types available to convert from:");
@@ -38,30 +43,33 @@ fn receive_temperature() -> (f32, Option<TempType>) {
         .read_line(&mut temperature_and_type)
         .expect("Failed to read line.");
 
-    let (temperature, temp_type_string)
+    let (temp_value, temp_type)
         = split_temperature_and_type(&temperature_and_type);
 
-    let temperature: f32 = match temperature.trim().parse() {
+    let mut temperature_and_type = Temperature {
+        temp_type: None,
+        value: 0.0
+    };
+
+    temperature_and_type.value = match temp_value.trim().parse() {
         Ok(num) => num,
-        Err(_) => return (0.0, None),
+        Err(_) => return temperature_and_type,
     };
 
     // The user may have input the temperature type using the full word
     // or they may have input just the first letter of the temperature type.
     // Extract the first letter of their input.
-    let temp_type_char = temp_type_string.chars().next().unwrap();
+    let temp_type = temp_type.chars().next().unwrap();
 
-    let mut temperature_type: Option<TempType> = None;
-
-    if (temp_type_char == 'C') || (temp_type_char == 'c') {
-        temperature_type = Some(TempType::Celcius);
-    } else if (temp_type_char == 'F') || (temp_type_char == 'f') {
-        temperature_type = Some(TempType::Fahrenheit);
-    } else if (temp_type_char == 'K') || (temp_type_char == 'k') {
-        temperature_type = Some(TempType::Kelvin);
+    if (temp_type == 'C') || (temp_type == 'c') {
+        temperature_and_type.temp_type = Some(TempType::Celcius);
+    } else if (temp_type == 'F') || (temp_type == 'f') {
+        temperature_and_type.temp_type = Some(TempType::Fahrenheit);
+    } else if (temp_type == 'K') || (temp_type == 'k') {
+        temperature_and_type.temp_type = Some(TempType::Kelvin);
     }
 
-    return (temperature, temperature_type);
+    return temperature_and_type;
 }
 
 fn split_temperature_and_type(temperature_and_type: &str) -> (&str, &str) {
