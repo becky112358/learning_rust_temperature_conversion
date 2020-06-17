@@ -17,16 +17,9 @@ struct Temperature {
 }
 
 fn main() {
-    let temp = receive_temperature();
+    let temperature = receive_temperature();
 
-    match temp.temp_type {
-        Some(TempType::Celcius) => convert_from_celcius(temp.value),
-        Some(TempType::Fahrenheit) => convert_from_fahrenheit(temp.value),
-        Some(TempType::Kelvin) => convert_from_kelvin(temp.value),
-        None => {
-            println!("Unrecognised type input, cannot convert temperature.");
-        }
-    }
+    temperature.convert_temperature();
 }
 
 fn receive_temperature() -> Temperature {
@@ -82,6 +75,19 @@ fn split_temperature_and_type(temperature_and_type: &str) -> (&str, &str) {
     }
 
     (&temperature_and_type[..], &temperature_and_type[..])
+}
+
+impl Temperature {
+    fn convert_temperature(&self) {
+        match self.temp_type {
+            Some(TempType::Celcius) => convert_from_celcius(self.value),
+            Some(TempType::Fahrenheit) => convert_from_fahrenheit(self.value),
+            Some(TempType::Kelvin) => convert_from_kelvin(self.value),
+            None => {
+                println!("Unrecognised type input, cannot convert temperature");
+            }
+        }
+    }
 }
 
 fn convert_from_celcius(c: f32) {
