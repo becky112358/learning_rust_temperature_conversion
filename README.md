@@ -26,7 +26,7 @@ For example:
 
 The computer will then print the temperature in Celcius, Fahrenheit, and Kelvin.
 
-## Restrictions
+## Limitations
 
 Temperature and type must be input precisely as follows:
 
